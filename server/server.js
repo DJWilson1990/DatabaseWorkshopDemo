@@ -1,0 +1,39 @@
+//setup
+import express from "express";
+import cors from "cors";
+
+import Database from "better-sqlite3";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+const db = new Database("database.db");
+
+const PORT = "1010"; //can change port number easy this way without looking through code and changing where needed in the app.listen
+
+//root route
+app.get("/", (request, response) => {
+  response.send("Hello"); //sending string back - probably use this one!
+  response.json({ Hello }); //send json back
+  response.status(200); //send status code back (200 means OK!).....dont need to do all 3. just different ways.
+});
+
+// setting port to listen
+app.listen(PORT, () => {
+  console.log(`Server on port: ${PORT}`); //needs `` to work properly
+});
+
+//All of the above to set up server side!
+
+//getting information
+app.get("/sports", (req, res) => {
+  try {
+    let sports = db.prepare(`SELECT * FROM sports`).all();
+    // .prepare() prepares info, .all calls the info. returns the data.
+    res.status(200).json(sports);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// query param ? eg http://localhost:1010/sports?id=1    the ?id=1 is the query for data with id=1
