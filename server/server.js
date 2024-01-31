@@ -37,3 +37,28 @@ app.get("/sports", (req, res) => {
 });
 
 // query param ? eg http://localhost:1010/sports?id=1    the ?id=1 is the query for data with id=1
+
+//TRYING to use WHERE to be more specific with what data we want
+// app.get('/sports', (req, res) => {
+//     try {
+//         if (req.query.id) {
+//             let sport = db.prepare(`SELECT * FROM sports WHERE id = ?`).all(req.query.id)
+//             return
+//         }
+//     }
+// })
+
+// POST route to create new data entries in Database
+app.post("/sports", (req, res) => {
+  try {
+    const sport = req.body.sport;
+    const year = req.body.year;
+    // run my sql statement
+    const newSport = db
+      .prepare(`INSERT INTO sports (sport, year) VALUES(?,?)`) // ??'s are replaced by the values in .run(sport, year) (enter values in body in postman)
+      .run(sport, year);
+    res.status(500).json(newSport);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+});
