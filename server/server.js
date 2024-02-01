@@ -53,10 +53,11 @@ app.post("/sports", (req, res) => {
   try {
     const sport = req.body.sport;
     const year = req.body.year;
+    const imgURL = req.body.imgURL;
     // run my sql statement
     const newSport = db
-      .prepare(`INSERT INTO sports (sport, year) VALUES(?,?)`) // ??'s are replaced by the values in .run(sport, year) (enter values in body in postman)
-      .run(sport, year);
+      .prepare(`INSERT INTO sports (sport, year, imgURL) VALUES(?, ?, ?)`) // ??'s are replaced by the values in .run(sport, year) (enter values in body in postman)
+      .run(sport, year, imgURL);
     res.status(500).json(newSport);
   } catch (err) {
     res.status(500).json({ error: err });
